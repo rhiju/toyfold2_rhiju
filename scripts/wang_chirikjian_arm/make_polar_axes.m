@@ -8,4 +8,5 @@ for i = 1:12;
     plot3( 4*cos(2*pi*i/12) * [-1 1], 4*sin(2*pi*i/12)*[-1 1], [1 1], 'color',[0.5 0.5 0.5]);
 end
 axis( 4*[-1 1 -1 1]);
+set(gca,'ydir','normal')
 axis equal
