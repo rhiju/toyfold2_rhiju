@@ -1,0 +1,125 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1504\cocoasubrtf830
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Menlo-Regular;\f2\fmodern\fcharset0 Courier;
+}
+{\colortbl;\red255\green255\blue255;\red180\green36\blue25;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c76409\c21698\c12524;\csgray\c100000;}
+\margl1440\margr1440\vieww11720\viewh19120\viewkind0
+\deftab720
+\pard\pardeftab720\sl240\partightenfactor0
+
+\f0\fs24 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\f1\fs22 \cf2 \cb3 \CocoaLigature0 2D/sample_robot_arm_stochastic_TESTS.m\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs20 \cf0 \cb1 \CocoaLigature1 NITER = 1000; n_link = 3; theta0 = 30 * pi/180;
+\fs24 \
+
+\fs20 sigma = sqrt(0.1);
+\fs24 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\f0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-06-23 at 8.49.17 AM.png \width9920 \height7840
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\f1\fs22 \cf2 \cb3 \CocoaLigature0 2D/check_SE2_harmonic_expansion.m
+\f0\fs24 \cf0 \cb1 \CocoaLigature1 \
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-06-23 at 8.49.12 AM.png \width10040 \height8120
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+\
+\'97\'97\
+\ul 2-3 July, 2019\
+\ulnone Compare to analytical calculation with Gaussian convolutions. Choosing a 4-arm rotator with 90\'b0, expect  \
+(dx, dy, dtheta)  covariance matrix to be:\
+\
+           dx dy dtheta\
+      dx  2   1    2\
+      dy  1   2    2\
+dtheta  2   2    4\
+\
+and determinant of this covariance matrix is 
+\b 4
+\b0 .\
+\
+when normalized to sigma^2. (assume length units chosen so that rotator length is 1).\
+\
+With a very concentrated angular distribution, rotator returns to origin.\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-07-03 at 2.52.55 PM.png \width9840 \height7860
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+ans =\
+\
+    1.9958    0.9960    1.9928\
+    0.9960    1.9985    1.9924\
+    1.9928    1.9924    3.9842\
+\
+\
+ans =\
+\
+    3.9892\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+
+\i \cf0 Pretty damn good\
+
+\i0 \
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-07-03 at 2.52.34 PM.png \width9540 \height7860
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf0 \
+ans =\
+\
+    1.9999    0.9333    1.9607\
+    0.9333    1.9633    1.9416\
+    1.9607    1.9416    3.9997\
+\
+\
+ans =\
+\
+    4.2401\
+\
+\
+\
+As sigma = sqrt(0.1) is more spread out, distribution gets more \'91swirly\'92, and covariance becomes less than predicted from Gaussian, but also less correlated (due to wrapping). Overall determinant (area in dx,dy,dtheta space)  increases a bit, due to loss of correlation:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-07-03 at 2.49.46 PM.png \width10080 \height7980
+}¬}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\pardirnatural\partightenfactor0
+\cf0 ans =\
+\
+    1.9301    0.4907    1.6289\
+    0.4907    1.7152    1.4592\
+    1.6289    1.4592    3.9972\
+\
+\
+ans =\
+\
+    5.9424\
+\
+Unclear what concentration is near identity (dx=0,dy=0,dtheta=0) \'96\'a0more or less concentrated than Gaussian prediction?\
+\
+\
+\
+\
+}
