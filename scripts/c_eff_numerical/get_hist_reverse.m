@@ -45,15 +45,3 @@ for i = 1:NITER
 end
 toc
 
-
-%%
-if ( use_mvksdensity );
-    tic
-    [x1,x2,x3] = ndgrid(x_range,x_range,theta_range);
-    xi = [x1(:) x2(:) x3(:)];
-    s = std( pts )*(4/(3+2)/size(pts,1))^(1/(3+4))
-    [f,bw] = mvksdensity(pts,xi,'Bandwidth',s);
-    hist_reverse = reshape( f, size( hist_reverse ) );
-    toc
-end
-

@@ -39,20 +39,8 @@ for i = 1:NITER
         x = x + [cos( theta) sin(theta) ];
         xpath(:,n+1) = x;
     end
-    theta = 
     pts = [pts; x,theta];
     hist_forward = update_histogram( x, theta, hist_forward, L, dL, dtheta );
     if (NITER <= 100 ); plot( xpath(1,:),xpath(2,:), '-','linew',0.5,'color',[0.5,0.5,0.5] ); hold on; end;
 end
 toc
-
-%%
-if ( use_mvksdensity );
-    tic
-    [x1,x2,x3] = ndgrid(x_range,x_range,theta_range);
-    xi = [x1(:) x2(:) x3(:)];
-    s = std( pts )*(4/(3+2)/size(pts,1))^(1/(3+4));
-    [f,bw] = mvksdensity(pts,xi,'Bandwidth',s);
-    hist_forward = reshape( f, size( hist_forward ) );
-    toc
-end
