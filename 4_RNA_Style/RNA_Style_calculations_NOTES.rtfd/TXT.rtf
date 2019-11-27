@@ -42,8 +42,10 @@
 \f0 \cf0 \
 Histograms of 10-arm chain starting at origin, and with preferred direction 2*pi/10. \
 \
-{{\NeXTGraphic Screen Shot 2019-11-26 at 3.57.17 PM.png \width14600 \height15600 \appleattachmentpadding0 \appleembedtype0 \appleaqc
-}¬}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-26 at 3.57.17 PM.png \width14600 \height15600 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
 Pretty great convergence on grid-based C_eff:\
 \
 C_eff forward 1 reverse 9 ==> 0.089731\
@@ -60,23 +62,27 @@ C_eff forward 9 reverse 1 ==> 0.101268\
 Tried to use histograms to backtrack sample, but its too sparse in x,y,theta \'97 at n=5 or 6, path hits spots with zero intensity.\
 Had to use KDE to do backtrack, but then it worked:\
 \
-{{\NeXTGraphic Screen Shot 2019-11-26 at 4.00.09 PM.png \width6120 \height4840 \appleattachmentpadding0 \appleembedtype0 \appleaqc
-}¬}\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-26 at 4.00.09 PM.png \width6120 \height4840 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
 \
-\ul What if we have theta0 = 0 \'97> closer to \'93actual\'94 RNA model.\
-\ulnone \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \ul What if we have theta0 = 0 \'97> closer to \'93actual\'94 RNA model.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \ulnone \
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 \cf0 {{\NeXTGraphic Screen Shot 2019-11-26 at 5.07.44 PM.png \width14080 \height15200 \appleattachmentpadding0 \appleembedtype0 \appleaqc
-}¬}\
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
 \
 Had to sample 4x the number of points to get reasonable chain closure (50,000 -> 200,000)\
 \pard\pardeftab720\partightenfactor0
 
 \f1\fs20 \cf2 % parameters
 \fs24 \cf0 \
-\pard\pardeftab720\partightenfactor0
 
-\fs20 \cf0 NITER = 200000;
+\fs20 NITER = 200000;
 \fs24 \
 
 \fs20 sigma = 0.5;
@@ -115,5 +121,23 @@ But sampled trajectories
 \'95 Will be cool to now rotate and translate these and generate new sample trajectories & C_eff\'92s, including base-pair like trajectories.\
 \
 \
+\'95\'a0Tried circular KDE from internet library, but it failed on this edge case.\
 \
+\'95\'a0Good stress-test \'97> calculate 3-link system. Should be perfect equilateral. Its not \'97 but that appears due to major lack of statistics:\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 2.38.28 PM.png \width6560 \height11020 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 2.38.05 PM.png \width7440 \height11060 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\
+Similar issue with 4-arm, where answers should be perfect rhombuses \'97 slightly off:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 2.39.29 PM.png \width7500 \height10200 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
 }
