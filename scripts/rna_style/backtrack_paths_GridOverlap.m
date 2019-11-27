@@ -1,12 +1,11 @@
 % parameters
-NITER = 200000;
+NITER = 20000;
 sigma = 0.5;
 theta0 = 0; %2*pi/10; 
 dtheta = 2*pi/10;
-dL = 0.1; 
+dL = 0.2; 
 L = 12.0;
 n_max= 10;
-use_mvksdensity = 1;
 
 %%
 % main histogram loop --> forward
