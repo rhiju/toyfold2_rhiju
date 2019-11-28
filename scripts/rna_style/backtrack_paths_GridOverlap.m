@@ -50,11 +50,12 @@ trans = [0,0];
 rot = 0;
 plot_steps = 0;
 use_mvksdensity = 1;
-%all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, [], use_mvksdensity, plot_steps);
+all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, [], use_mvksdensity, plot_steps);
 
 %%
 % for fun.
-trans = [0,-2];
+NSAMPLE = 25;
+trans = [0,2];
 rot = 0;
 plot_steps = 0;
 all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, trans,rot, use_mvksdensity, plot_steps);
@@ -71,19 +72,19 @@ trans_vec  = [0 1];
 all_xpaths = get_sample_trajectories_GRID( NSAMPLE, all_n_link, all_trans, trans_vec, rot, theta0, sigma, pts_reverse,  use_mvksdensity, plot_steps );
 export_fig( 'Figures/lateral_GRID.pdf' );
 
-%%
+
 rot = 0;
 trans_vec = [1 0];
 all_xpaths = get_sample_trajectories_GRID( NSAMPLE, all_n_link, all_trans, trans_vec, rot, theta0, sigma, pts_reverse,  use_mvksdensity, plot_steps );
 export_fig( 'Figures/axis_GRID.pdf' );
 
-%%
+
 rot = pi;
 trans_vec  = [0 1];
 all_xpaths = get_sample_trajectories_GRID( NSAMPLE, all_n_link, all_trans, trans_vec, rot, theta0, sigma, pts_reverse,  use_mvksdensity, plot_steps );
 export_fig( 'Figures/lateral_reversedir_GRID.pdf' );
 
-%%
+
 rot = pi;
 trans_vec  = [1 0];
 all_xpaths = get_sample_trajectories_GRID( NSAMPLE, all_n_link, all_trans, trans_vec, rot, theta0, sigma, pts_reverse,  use_mvksdensity, plot_steps );

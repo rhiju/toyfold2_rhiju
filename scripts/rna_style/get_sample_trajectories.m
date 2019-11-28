@@ -4,8 +4,30 @@ function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pt
 % Sample trajectories based on forward steps, weighted by reverse
 %   probability density (using KDE by default)
 %
+% INPUTS
+%  NSAMPLE  = number of desired trajectories
+%  n_link   = number of links in chain
+%  theta0   = preferred angle at each link (radians)
+%  sigma    = width of wrapped Gaussian for angle (radians)
+%  pts_reverse = sampled (x,y,theta) for links built from origin in
+%                    'reverse' direction
+% INPUTS (optional)
+%  trans    = (x,y) target translation  [default 0,0]
+%  rot      = target rotation (radians) [default 0]
+%  use_mvksdensity = use kernel density estimation [default: 1]
+%  plot_steps = show intermediate steps & reverse histogram, pausing
+%                       between each one [default 0]
 %
-% (C) R. Das, Stanford University
+% OUTPUT
+%  all_xpath = [2 x n_link+1 x Nsample] generated paths. NaN marks paths
+%                 that did not complete
+%
+% (C) R. Das, Stanford University, 2019
+
+if ~exist( 'trans', 'var') trans = [0,0]; end;
+if ~exist( 'rot', 'var') rot = 0; end;
+if ~exist( 'use_mvksdensity', 'var' ) use_mvksdensity = 1; end;
+if ~exist( 'plot_steps', 'var') plot_steps = 0; end;
 
 for n = 1:(n_link-1)
     pts_reverse{n}(:,1:2) = pts_reverse{n}(:,1:2) * [cos(rot), sin(rot); -sin(rot) cos(rot)] + trans;

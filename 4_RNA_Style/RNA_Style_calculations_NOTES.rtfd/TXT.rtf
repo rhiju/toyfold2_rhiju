@@ -1,8 +1,10 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Oblique;
 \f3\froman\fcharset0 Times-Roman;\f4\fswiss\fcharset0 Helvetica-Oblique;}
-{\colortbl;\red255\green255\blue255;\red34\green139\blue34;\red0\green0\blue233;}
-{\*\expandedcolortbl;;\csgenericrgb\c13333\c54510\c13333;\cssrgb\c0\c0\c93333;}
+{\colortbl;\red255\green255\blue255;\red34\green139\blue34;\red0\green0\blue233;\red34\green139\blue34;
+\red160\green32\blue240;}
+{\*\expandedcolortbl;;\csgenericrgb\c13333\c54510\c13333;\cssrgb\c0\c0\c93333;\csgenericrgb\c13333\c54510\c13333;
+\csgenericrgb\c62745\c12549\c94118;}
 \margl1440\margr1440\vieww17660\viewh18700\viewkind0
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
 
@@ -241,4 +243,102 @@ C_eff forward 5 reverse 5 [KDE2] ==> 0.000041\
 \'85\
 \
 \
+\
+Figured out how to sample trajectories that end at target translations and rotations. Can get some beautiful spirally patterns:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs20 \cf4 % for fun.
+\fs24 \cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\fs20 \cf0 NSAMPLE = 25;
+\fs24 \
+
+\fs20 trans = [0,2];
+\fs24 \
+
+\fs20 rot = 0;
+\fs24 \
+
+\fs20 plot_steps = 0;
+\fs24 \
+
+\fs20 all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, trans,rot, use_mvksdensity, plot_steps);
+\fs24 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 6.35.47 PM.png \width3600 \height3760 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs20 \cf0  \
+e.g., following will push endpoints along x-axis (trans_vec), and require reversal of direction (rot = pi):
+\fs24 \
+
+\fs20 rot = pi;
+\fs24 \
+
+\fs20 trans_vec  = [1 0];
+\fs24 \
+
+\fs20 all_xpaths = get_sample_trajectories_GRID( NSAMPLE, all_n_link, all_trans, trans_vec, rot, theta0, sigma, pts_reverse,  use_mvksdensity, plot_steps );
+\fs24 \
+
+\fs20 export_fig( \cf5 'Figures/axis_reversedir_GRID.pdf'\cf0  );\
+\
+Cool to see how different lengths of linkers lead to different patterns:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f4\i\fs24 \cf0 axis:
+\f1\i0\fs20 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 6.28.40 PM.png \width11800 \height10800 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f4\i \cf0 lateral:
+\f1\i0\fs20 \
+\pard\pardeftab720\partightenfactor0
+
+\fs24 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 6.28.14 PM.png \width11420 \height11460 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f4\i \cf0 axis_reverse:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f1\i0 \cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0 \cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 6.26.23 PM.png \width15120 \height13420 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+
+\f4\i lateral_reverse:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\i0 \cf0 {{\NeXTGraphic Screen Shot 2019-11-27 at 6.27.40 PM.png \width11300 \height11320 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
 }
