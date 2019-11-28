@@ -1,16 +1,34 @@
 function C_eff = get_C_eff_from_pts( pts_f, pts_r);
 % C_eff = get_C_eff_from_pts( pts_f, pts_r);
+%
+% INPUTS
+%  pts_f = sampled (x,y,theta) for forward chain segment
+%  pts_r = sampled (x,y,theta) for reverse chain segment
+%
+% OUTPUT
+%  C_eff = Effective molarity for chain closure between forward samples
+%            and reverse samples, calculated based on overlap of
+%            distributions (over translations & rotations), and using
+%            MATLAB's KDE estimator.
+%
+% (C) R. Das, Stanford University, 2019
 
+% need to collapse angles into 0 to 2*pi range.
 pts_r(:,3) = mod( pts_r(:,3), 2*pi );
 pts_f(:,3) = mod( pts_f(:,3), 2*pi );
 
-% s = get_kde_bandwidth( pts_f );
-% p = mvksdensity(pts_f,pts_r,'Bandwidth',s)';
+s = get_kde_bandwidth( pts_f );
+p = mvksdensity(pts_f,pts_r,'Bandwidth',s)';
 
 % external library that fails (and is slower too)
 %p = akde(pts_f,pts_r); %,'Bandwidth',s)';
 
+% also tried a circular KDE library avaliable on Mathwork File Exchange
+%   but kept getting garbage.
+
 % try to slice out theta ranges, and do (x,y) KDE's separately
+%  fails to get good estimates -- turns out to be really powerful to have
+%  KDE in theta direction.
 % dtheta = pi/10;
 % theta_range = [0:dtheta:2*pi];
 % p = [];
@@ -25,3 +43,4 @@ pts_f(:,3) = mod( pts_f(:,3), 2*pi );
 % end
 
 C_eff = (2*pi) * mean(p);
+
