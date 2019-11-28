@@ -1,4 +1,4 @@
-function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, use_mvksdensity, plot_steps);
+function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, trans, rot, use_mvksdensity, plot_steps);
 % all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_forward, pts_reverse, use_mvksdensity, plot_steps);
 %
 % Sample trajectories based on forward steps, weighted by reverse
@@ -7,9 +7,14 @@ function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pt
 %
 % (C) R. Das, Stanford University
 
+for n = 1:(n_link-1)
+    pts_reverse{n}(:,1:2) = pts_reverse{n}(:,1:2) * [cos(rot), sin(rot); -sin(rot) cos(rot)] + trans;
+    pts_reverse{n}(:,3) = pts_reverse{n}(:,3) + rot;
+end
+
 if plot_steps | ~use_mvksdensity
     tic
-    dtheta = 2*pi/10;dL = 0.2; L = 12.0;
+    dtheta = 2*pi/10;dL = 1; L = 12.0;
     for n = 1:(n_link-1)
         [hist_reverse{n},x_range,theta_range] = get_histogram(pts_reverse{n}, L, dL, dtheta);
     end
@@ -24,7 +29,7 @@ for q = 1:NSAMPLE
     x = [0,0];
     xpath = [0,0]';
     tic
-    for n = 1:(n_link-2)
+    for n = 1:(n_link-1)
         % need to pick theta from a distribution chosen from wrapped
         %  gaussian, but further weighted by reverse histogram.
         possible_theta = [0:deltheta:2*pi];
@@ -42,7 +47,7 @@ for q = 1:NSAMPLE
             xi = [possible_x; possible_y; possible_theta]';
 
             % MATLAB's multivariate ksdensity toolbox. 
-            s = std( pts )*(4/(3+2)/size(pts,1))^(1/(3+4)); % bandwidth estimator
+            s = get_kde_bandwidth( pts );
             p_reverse = mvksdensity(pts,xi,'Bandwidth',s)';
             
             % Tried this other toolbox (circ_ksdensityn) but it appears to stall?
@@ -51,17 +56,23 @@ for q = 1:NSAMPLE
             % Issue with straight up interpolation --> many bins go to zero!
             p_reverse = interp3( x_range, x_range, theta_range, hist_reverse{n_link-n},possible_x,possible_y,possible_theta,'linear',0 );
         end
-        if ( sum(p_reverse) == 0.0 );  xpath(1:2,[n:n_link-1] ) = NaN; break; end;
+        if ( sum(p_reverse) == 0.0 );  xpath(1:2,[n:n_link] ) = NaN; break; end;
         p_reverse = p_reverse/sum(p_reverse)/deltheta;
         
         p = p_forward .* p_reverse;
         p_cumsum = cumsum( p+1e-10 );
         p_cumsum = p_cumsum / p_cumsum(end);
+
+        if ( n < n_link-1 )
+            theta = interp1( p_cumsum, possible_theta, rand(1) );
+            x = x + [cos( theta ),sin(theta)];
+        else
+            % penultimate point is specified at a special spot -- 
+            %  one length 'back' from endpoint.
+            x = [-1, 0] * [cos(rot), sin(rot); -sin(rot) cos(rot)] + trans;
+        end
         
-        theta = interp1( p_cumsum, possible_theta, rand(1) );
-        x = x + [cos( theta ),sin(theta)];
         xpath(:,n+1) = x;
-        
         if plot_steps
             subplot(2,1,1);
             plot( possible_theta, [p_forward; p_reverse; p ],'linew',2 );
@@ -71,28 +82,37 @@ for q = 1:NSAMPLE
             hold on; plot( possible_x, possible_y, 'k-' );
             axis image
             plot( x(1), x(2), 'kx' );
+            plot( xpath(1,:),xpath(2,:),'k' );
             colormap( 1 - copper(100) );
             legend( 'Possible next positions','Choice' );
             set(gcf, 'PaperPositionMode','auto','color','white');
+            set(gca,'ydir','normal');
             pause;
         end
     end
     
     % last points are at fixed locations:
-    xpath = [xpath, [-1 0]'];
-    xpath = [xpath, [0 0]'];
+    xpath = [xpath, trans'];
     toc    
 
     all_xpath(:, :, q) = xpath;
 end
 
 
-clf;
+cla;
 for n = 1:NSAMPLE
-    plot( all_xpath(1,:,n), all_xpath(2,:,n),'k' ); hold on
+    plot( all_xpath(1,:,n), all_xpath(2,:,n),'linewidth',2 ); hold on
 end
-plot( 0,0,'k.' ); axis image; axis off
+plot( 0,0,'ko','markerfacecolor','k','markersize',5 ); 
+plot( trans(1),trans(2),'kx','markersize',5 ); 
+axis image; axis off
 
 
 
-
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% function M = get_transform_matrix( trans, rot )
+% 
+% M = [cos( rot ) -sin( rot ) trans(1); sin(rot), cos(rot) trans(2); 0 0 1]';
+% M
+% 
