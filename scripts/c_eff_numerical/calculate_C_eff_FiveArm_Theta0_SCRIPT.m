@@ -53,7 +53,6 @@ figure(2); clf
 loglog( sigma, [C_eff_NAIVE; C_eff_NAIVE2; C_eff_last_link; C_eff_last_link2],'o'); hold on
 plot( sigma_two_last_links, C_eff_two_last_links );
 
-
 % Harmonic expansion
 C_eff_harmonic = [];
 figure(1)
@@ -117,11 +116,32 @@ figure(2); clf
 loglog( sigma, [C_eff_NAIVE; C_eff_NAIVE2; C_eff_last_link; C_eff_last_link2],'o'); hold on;
 plot( sigma_grid_overlap, [C_eff_grid_overlap1; C_eff_grid_overlap2; C_eff_grid_overlap3] );
 
+%% KDE-based overlap
+C_eff_KDE_overlap1 = [];
+C_eff_KDE_overlap2 = [];
+C_eff_KDE_overlap3 = [];
+C_eff_KDE_overlap4 = [];
+figure(1); clf
+sigma_KDE_overlap = 10.^[-3:0.1:2];
+n_link = 5; theta0 = 0;
+NITER = 1000;
+for i = 1:length(sigma_KDE_overlap);
+    C_eff_KDE_overlap1( i ) = C_eff_robot_arm_stochastic_KDE_Overlap( sigma_KDE_overlap(i), NITER, n_link, theta0, 1 );
+    C_eff_KDE_overlap2( i ) = C_eff_robot_arm_stochastic_KDE_Overlap( sigma_KDE_overlap(i), NITER, n_link, theta0, 2 );
+    C_eff_KDE_overlap3( i ) = C_eff_robot_arm_stochastic_KDE_Overlap( sigma_KDE_overlap(i), NITER, n_link, theta0, 3 );
+    C_eff_KDE_overlap4( i ) = C_eff_robot_arm_stochastic_KDE_Overlap( sigma_KDE_overlap(i), NITER, n_link, theta0, 4 );
+end
+figure(2); clf
+loglog( sigma, [C_eff_NAIVE; C_eff_NAIVE2; C_eff_last_link; C_eff_last_link2],'o'); hold on;
+plot( sigma_KDE_overlap, [C_eff_KDE_overlap1; C_eff_KDE_overlap2; C_eff_KDE_overlap3] );
+
+
 %% In limit of large sigma, I have another way to compute, in terms of normal 2D Fourier expansion and Bessel functions...
 dx = 0.001; x = [0:dx:1000];
 C_eff_analytical = sum( besselj(0,x).^5 .* x * dx ) / (2*pi);
 
 %% Gaussian propagation
+sigma_fine = 10.^[-3:0.1:2];
 C_eff_gaussian_convolution = C_eff_robot_arm_gaussian_convolution(5,theta0) ./sigma_fine.^3; 
 
 %% make final plot
@@ -139,12 +159,16 @@ plot( sigma_grid_overlap, C_eff_grid_overlap1, 'o','color',[0.7 0.3 1]);
 plot( sigma_grid_overlap, C_eff_grid_overlap2, 's','color',[0.7 0.3 1],'markerfacecolor',[0.7 0.3 1] );
 plot( sigma_grid_overlap, C_eff_grid_overlap3, 'v','color',[0.7 0.3 1],'markerfacecolor',[0.7 0.3 1] );
 plot( sigma_grid_overlap, C_eff_grid_overlap4, '^','color',[0.7 0.3 1]);
-
+plot( sigma_KDE_overlap, C_eff_KDE_overlap1, 'o','color',[1 0.6 1]);
+plot( sigma_KDE_overlap, C_eff_KDE_overlap2, 's','color',[1 0.6 1],'markerfacecolor',[1 0.6 1] );
+plot( sigma_KDE_overlap, C_eff_KDE_overlap3, 'v','color',[1 0.6 1],'markerfacecolor',[1 0.6 1] );
+plot( sigma_KDE_overlap, C_eff_KDE_overlap4, '^','color',[1 0.6 1]);
 
 set(gca,'xscale','log','yscale','log');
 h = legend( 'RNAmake-NAIVE','RNAmake-NAIVEfine','LastLink','LastLink-fine','TwoLastLinks',...
     'MiningMinima2','Harmonic to order 10 (Wang-Chirikjian)','Harmonic to order 20 (Wang-Chirikjian)','Gaussian conv', ...
-    'Analytical (infinite sigma)','Semianalytical (2D integral)','Grid Overlap1','Grid Overlap2','Grid Overlap3','Grid Overlap4');
+    'Analytical (infinite sigma)','Semianalytical (2D integral)','Grid Overlap1','Grid Overlap2','Grid Overlap3','Grid Overlap4',...
+    'KDE Overlap1','KDE Overlap2','KDE Overlap3','KDE Overlap4');
 xlabel( '\sigma (std. dev. of angle between arms)')
 ylabel( 'C_{eff}' );
 title( 'C_{eff} predictions for effector with 5 rigid arms to return to origin [theta_0 = 0]' );
