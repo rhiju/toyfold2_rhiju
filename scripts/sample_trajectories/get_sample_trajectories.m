@@ -123,13 +123,14 @@ end
 
 cla;
 for n = 1:NSAMPLE
+    if any( isnan( all_xpath(1,:,n) ) ) continue; end;
     plot( all_xpath(1,:,n), all_xpath(2,:,n),'linewidth',2 ); hold on
 end
 plot( 0,0,'ko','markerfacecolor','k','markersize',5 ); 
 plot( trans(1),trans(2),'kx','markersize',5 ); 
 axis image; axis off
 
-
+drawnow;
 
 % 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
