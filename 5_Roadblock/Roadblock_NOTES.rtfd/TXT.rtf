@@ -1,0 +1,141 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Oblique;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww20620\viewh13880\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 roadblock_tests_SCRIPT.m\
+\
+Forward/reverse \'97 update scripts to accept starting/ending translation & rotation, and\
+ (center_x, center_y, radius) of a spherical roadblock.\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-30 at 3.59.33 PM.png \width7460 \height6780 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-30 at 3.59.09 PM.png \width7680 \height5520 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-11-30 at 4.00.41 PM.png \width13660 \height15260 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+C_eff is pretty choppy\'85. hang on should this even work?\
+\
+C_eff forward 5 reverse 15 [KDE1] ==> 0.001428\
+C_eff forward 5 reverse 15 [KDE2] ==> 0.001409\
+C_eff forward 6 reverse 14 [KDE1] ==> 0.001848\
+C_eff forward 6 reverse 14 [KDE2] ==> 0.001682\
+C_eff forward 7 reverse 13 [KDE1] ==> 0.001586\
+C_eff forward 7 reverse 13 [KDE2] ==> 0.001528\
+C_eff forward 8 reverse 12 [KDE1] ==> 0.001461\
+C_eff forward 8 reverse 12 [KDE2] ==> 0.001420\
+C_eff forward 9 reverse 11 [KDE1] ==> 0.001167\
+C_eff forward 9 reverse 11 [KDE2] ==> 0.001155\
+C_eff forward 10 reverse 10 [KDE1] ==> 0.001048\
+C_eff forward 10 reverse 10 [KDE2] ==> 0.001029\
+C_eff forward 11 reverse 9 [KDE1] ==> 0.001164\
+C_eff forward 11 reverse 9 [KDE2] ==> 0.001165\
+C_eff forward 12 reverse 8 [KDE1] ==> 0.001226\
+C_eff forward 12 reverse 8 [KDE2] ==> 0.001239\
+C_eff forward 13 reverse 7 [KDE1] ==> 0.001274\
+C_eff forward 13 reverse 7 [KDE2] ==> 0.001274\
+\
+Also, let\'92s make exclusion zone bigger \'97 more of a stress test \'97 circle of radius 5.\
+\
+\
+Getting a lot of variability now in KDE..\
+E.g. try to compute for 15-link \'97 just able to connect around sphere:\
+\
+C_eff forward 3 reverse 12 [KDE1] ==> 0.000000\
+C_eff forward 3 reverse 12 [KDE2] ==> 0.000028\
+C_eff forward 4 reverse 11 [KDE1] ==> 0.000000\
+C_eff forward 4 reverse 11 [KDE2] ==> 0.000038\
+C_eff forward 5 reverse 10 [KDE1] ==> 0.000000\
+C_eff forward 5 reverse 10 [KDE2] ==> 0.000028\
+C_eff forward 6 reverse 9 [KDE1] ==> 0.000001\
+C_eff forward 6 reverse 9 [KDE2] ==> 0.000017\
+C_eff forward 7 reverse 8 [KDE1] ==> 0.000004\
+C_eff forward 7 reverse 8 [KDE2] ==> 0.000008\
+C_eff forward 8 reverse 7 [KDE1] ==> 0.000010\
+C_eff forward 8 reverse 7 [KDE2] ==> 0.000003\
+\
+\
+C_eff forward 9 reverse 11 [KDE1] ==> 0.001182\
+C_eff forward 9 reverse 11 [KDE2] ==> 0.001083\
+C_eff forward 10 reverse 10 [KDE1] ==> 0.001181\
+C_eff forward 10 reverse 10 [KDE2] ==> 0.001208\
+C_eff forward 11 reverse 9 [KDE1] ==> 0.001237\
+C_eff forward 11 reverse 9 [KDE2] ==> 0.001454\
+C_eff forward 12 reverse 8 [KDE1] ==> 0.001156\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Get 5k samples\'85\
+\
+Weird oscillations for grid-based at n_link = 17? Systematic offsets between KDE1 and KDE2?:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 11.35.15 AM.png \width8420 \height5480 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 Really systematic offsets between KDE1 and KDE2, and both undershoot grid:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 11.33.41 AM.png \width8160 \height5500 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+See below \'97 because MATLAB\'92s KDE function doesn\'92t handle periodic boundary conditions, it can screw up some parts. However, even after that fix there is some systematic issue:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 12.15.59 PM.png \width10080 \height8200 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Actually, I\'92m not sure that C_eff is guaranteed to be the same at every connection point when there is a steric roadblock! Need to worth out integral. \
+Nevertheless, forward/reverse should agree at a given n_forward. I wonder if the issue is due to the hard boundary, which violates smoothness assumptions in KDE! Grid may well be better!\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+As sanity check, Updated trajectory sampling to handle roadblock. Cool:\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 11.59.57 AM.png \width7240 \height7420 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul \ulc0 \
+Hmmm\'85 let\'92s try 
+\f1\i without
+\f0\i0  roadblock. \
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ulc0 S\ulnone till some issues, particularly for low n_link. Weird. \
+Something to do with theta = 0 or 2pi being boundary for mvskdensity, and not treated as circle?\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \ul \ulc0 \
+\ulnone {{\NeXTGraphic Screen Shot 2019-12-01 at 11.42.33 AM.png \width10500 \height6260 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 quick test \'97 shift all angles by pi/2. Yes:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 12.04.05 PM.png \width10200 \height8120 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Now what if we shift theta\'92s so as to best concentrate the \'97 OK a little smoother:\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 12.11.43 PM.png \width10100 \height8280 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+Check n_link = 20 \'97 looks reasonable\
+\
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 {{\NeXTGraphic Screen Shot 2019-12-01 at 12.13.33 PM.png \width9860 \height8080 \appleattachmentpadding0 \appleembedtype0 \appleaqc
+}¬}\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+\cf0 \
+\
+\
+}

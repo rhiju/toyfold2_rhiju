@@ -13,9 +13,13 @@ function C_eff = get_C_eff_from_pts( pts_f, pts_r);
 %
 % (C) R. Das, Stanford University, 2019
 
-% need to collapse angles into 0 to 2*pi range.
-pts_r(:,3) = mod( pts_r(:,3), 2*pi );
-pts_f(:,3) = mod( pts_f(:,3), 2*pi );
+% need to collapse angles into 0 to 2*pi range. 
+% Ideally shift to centroid of distribution to avoid boundary problems at
+% 0-2pi wrap (MATLAB's mvksdensity does not allow periodic boundary
+% conditions, boo).
+shift_theta = figure_out_shift( pts_f(:,3) );
+pts_f(:,3) = mod( pts_f(:,3)+shift_theta, 2*pi )-shift_theta;
+pts_r(:,3) = mod( pts_r(:,3)+shift_theta, 2*pi )-shift_theta;
 
 s = get_kde_bandwidth( pts_f );
 p = mvksdensity(pts_f,pts_r,'Bandwidth',s)';
@@ -43,4 +47,15 @@ p = mvksdensity(pts_f,pts_r,'Bandwidth',s)';
 % end
 
 C_eff = (2*pi) * mean(p);
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function shift_theta = figure_out_shift( theta );
+% try a few shift values, and pick one that bests 'concentrates' the angles.
+shift_theta_vals = [0:(pi/4):2*pi];
+for i = 1:length( shift_theta_vals )
+    s( i ) =std( mod( theta+shift_theta_vals(i), 2*pi ) );
+end
+[~,idx] = min( s );
+shift_theta = shift_theta_vals( idx );
 

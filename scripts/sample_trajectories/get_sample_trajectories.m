@@ -1,5 +1,5 @@
-function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, trans, rot, use_mvksdensity, plot_steps);
-% all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_forward, pts_reverse, use_mvksdensity, plot_steps);
+function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_reverse, trans, rot, use_mvksdensity, plot_steps, trans_start, rot_start, pts_reverse_already_transformed, roadblock);
+% all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pts_forward, pts_reverse, use_mvksdensity, plot_steps, trans_start, rot_start, pts_reverse_already_transformed, roadblock);
 %
 % Sample trajectories based on forward steps, weighted by reverse
 %   probability density (using KDE by default)
@@ -17,6 +17,11 @@ function all_xpath = get_sample_trajectories( NSAMPLE, n_link, theta0, sigma, pt
 %  use_mvksdensity = use kernel density estimation [default: 1]
 %  plot_steps = show intermediate steps & reverse histogram, pausing
 %                       between each one [default 0]
+%  trans_start    = (x,y) start translation  [default 0,0]
+%  rot_start      = start rotation (radians) [default 0]
+%  pts_reverse_already_transformed = do not tranform pts_reverse by
+%               trans/rot [default 0 ]
+%  roadblock = [ctr_x,ctr_y,radius] of circular steric exclusion zone.
 %
 % OUTPUT
 %  all_xpath = [2 x n_link+1 x Nsample] generated paths. NaN marks paths
@@ -28,10 +33,15 @@ if ~exist( 'trans', 'var') trans = [0,0]; end;
 if ~exist( 'rot', 'var') rot = 0; end;
 if ~exist( 'use_mvksdensity', 'var' ) use_mvksdensity = 1; end;
 if ~exist( 'plot_steps', 'var') plot_steps = 0; end;
+if ~exist( 'trans_start', 'var') | length(trans_start) < 2; trans_start = [0,0]; end;
+if ~exist( 'rot_start', 'var') rot_start = 0; end;
+if ~exist( 'pts_reverse_already_transformed', 'var' ) pts_reverse_already_transformed = 0; end; 
 
-for n = 1:(n_link-1)
-    pts_reverse{n}(:,1:2) = pts_reverse{n}(:,1:2) * [cos(rot), sin(rot); -sin(rot) cos(rot)] + trans;
-    pts_reverse{n}(:,3) = pts_reverse{n}(:,3) + rot;
+if ~pts_reverse_already_transformed
+    for n = 1:(n_link-1)
+        pts_reverse{n}(:,1:2) = pts_reverse{n}(:,1:2) * [cos(rot), sin(rot); -sin(rot) cos(rot)] + trans;
+        pts_reverse{n}(:,3) = pts_reverse{n}(:,3) + rot;
+    end
 end
 
 if plot_steps | ~use_mvksdensity
@@ -47,21 +57,31 @@ deltheta = 0.01;
 all_xpath = zeros(2,n_link+1,NSAMPLE);
 for q = 1:NSAMPLE
     fprintf( 'Evaluating trajectory %d of %d...\n', q, NSAMPLE );
-    theta = 0;
-    x = [0,0];
-    xpath = [0,0]';
+    theta = rot_start;
+    x = trans_start;
+    xpath = trans_start';
     tic
     for n = 1:(n_link-1)
         % need to pick theta from a distribution chosen from wrapped
         %  gaussian, but further weighted by reverse histogram.
         possible_theta = [0:deltheta:2*pi];
-
-        % One-dimensional probability density (forward):
-        p_forward = wrapped_gaussian( (possible_theta-theta)-theta0, sigma );
         
         possible_x = x(1) + [cos( possible_theta )];
         possible_y = x(2) + [sin( possible_theta )];
-        
+        if exist( 'roadblock', 'var' ) && ~isempty( roadblock )
+            for m = 1:length( possible_theta );
+                idx_ok(m) = norm( [possible_x(m),possible_y(m)] - roadblock(1:2) ) > roadblock(3);
+            end
+            idx = find( idx_ok );
+            possible_theta = possible_theta( idx );
+            possible_x = possible_x( idx );
+            possible_y = possible_y( idx );
+            if ( length(idx) == 0 );  xpath(1:2,[n:n_link] ) = NaN; break; end;
+        end            
+
+        % One-dimensional probability density (forward):
+        p_forward = wrapped_gaussian( (possible_theta-theta)-theta0, sigma );
+
         % One-dimensional probability density (reverse)
         if use_mvksdensity
             pts = pts_reverse{n_link-n};
@@ -128,6 +148,10 @@ for n = 1:NSAMPLE
 end
 plot( 0,0,'ko','markerfacecolor','k','markersize',5 ); 
 plot( trans(1),trans(2),'kx','markersize',5 ); 
+if exist( 'roadblock','var') && ~isempty( roadblock )
+    s = [0:0.01:2*pi];
+    plot( roadblock(1) + roadblock(3) * cos(s), roadblock(2) + roadblock(3)*sin(s),'k','linewidth',0.5 );
+end
 axis image; axis off
 
 drawnow;
