@@ -2,16 +2,17 @@
 NITER = 5000;
 sigma = 0.5;
 theta0 = 0; %2*pi/10; 
-n_max= 20; % number of links
+n_max= 50; % number of links
 
-roadblock = []; %[5,0,  5]; % circular roadblock
+%roadblock = [];  % no roadblock
+roadblock = [5,0,  5]; % circular roadblock
 trans_start = 0; rot_start = pi/2;
 trans_final = [10,0]; rot_final = -pi/2;
 
 %%
 % main histogram loop --> forward/reverse
-pts_forward = {}; pts_reverse = {};
-for n_link = 1:n_max
+%pts_forward = {}; pts_reverse = {};
+for n_link = 21:n_max
     fprintf( 'Doing %d of %d...\n',n_link,n_max);
     pts_forward{n_link} = get_pts_forward( NITER, sigma, theta0, n_link,trans_start,rot_start,roadblock);
     pts_reverse{n_link} = get_pts_reverse( NITER, sigma, theta0, n_link,trans_final,rot_final,roadblock );
@@ -31,6 +32,17 @@ for n = 1:(n_link-1)
     C_eff(n) = (2*pi) * sum(hist_forward{n}(:)/NITER .* hist_reverse{n_link-n}(:)/NITER/dtheta/dL^2);
     fprintf( 'C_eff forward %d reverse %d [hist] ==> %f\n', n, n_link-n, C_eff(n) );
 end
+
+%%
+all_C_eff = NaN * ones(n_link-1,n_link);
+for n_link = 1:n_max
+    for n = 1:(n_link-1)
+        all_C_eff(n,n_link) = (2*pi) * sum(hist_forward{n}(:)/NITER .* hist_reverse{n_link-n}(:)/NITER/dtheta/dL^2);
+        fprintf( 'C_eff forward %d reverse %d [hist] ==> %f\n', n, n_link-n, all_C_eff(n,n_link) );
+    end
+end
+clf; plot( [1:n_max], all_C_eff','ko' );
+
 %%
 % C_eff checks -- KDE
 n_link = 20;
